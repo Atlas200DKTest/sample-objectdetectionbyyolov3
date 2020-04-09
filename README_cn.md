@@ -1,106 +1,85 @@
-中文|[英文](README.md)
+中文|[English](Readme.md)
 
-# Yolov3检测网络应用<a name="ZH-CN_TOPIC_0185837719"></a>
+# Yolov3检测网络应用<a name="ZH-CN_TOPIC_0232337261"></a>
 
-本Application支持运行在Atlas 200 DK或者AI加速云服务器上，实现了对目标检测网络的推理功能。
+本Application支持运行在Atlas 200 DK或者AI加速云服务器上，实现了对yolov3目标检测网络的推理功能。
 
-## 前提条件<a name="zh-cn_topic_0182554604_section137245294533"></a>
+当前分支中的应用适配**1.32.0.0及以上**版本的[DDK&RunTime](https://ascend.huawei.com/resources)。
+
+## 前提条件<a name="zh-cn_topic_0228461856_section137245294533"></a>
 
 部署此Sample前，需要准备好以下环境：
 
 -   已完成Mind Studio的安装。
 -   已完成Atlas 200 DK开发者板与Mind Studio的连接，交叉编译器的安装，SD卡的制作及基本信息的配置等。
 
-## 软件准备<a name="zh-cn_topic_0182554604_section181111827718"></a>
+## 部署<a name="zh-cn_topic_0228461856_section412811285117"></a>
 
-运行此Sample前，需要按照此章节获取源码包，并进行相关的环境配置。
+可以选择如下快速部署或者常规方法部署，二选一即可：
 
-1.  获取源码包。
+1.  快速部署，请参考：  [https://github.com/Atlas200dk/faster-deploy](https://github.com/Atlas200dk/faster-deploy)  。
 
-    将[https://github.com/Atlas200dk/sample-objectdetctionbyyolov3](https://github.com/Atlas200dk/sample-objectdetectionbyyolov3)仓中的代码以Mind Studio安装用户下载至Mind Studio所在Ubuntu服务器的任意目录，例如代码存放路径为：$HOME/sample-objectdetection。
+    >![](public_sys-resources/icon-note.gif) **说明：**   
+    >-   该快速部署脚本可以快速部署多个案例，请选择objectdetectionyolov3案例部署即可。  
+    >-   该快速部署脚本自动完成了代码下载、模型转换、环境变量配置等流程，如果需要了解详细的部署过程请选择常规部署方式。转 **：[2. 常规部署](#zh-cn_topic_0228461856_li3208251440)**  
 
+2.  <a name="zh-cn_topic_0228461856_li3208251440"></a>常规部署，请参考：  [https://github.com/Atlas200dk/sample-README/tree/master/sample-objectdetectionyolov3](https://github.com/Atlas200dk/sample-README/tree/master/sample-objectdetectionbyyolov3)  。
 
-2. <a name="zh-cn_topic_0182554604_li2074865610364"></a>获取此应用中所需要的原始网络模型。
-
-   参考[表1](#zh-cn_topic_0182554604_table19942111763710)获取此应用中所用到的原始网络模型及其对应的权重文件，并将其存放到Mind Studio所在Ubuntu服务器的任意目录，例如：$HOME/ascend/models/yolov3。
-
-   **表 1**  检测网络应用使用模型
-
-   <a name="zh-cn_topic_0182554604_table19942111763710"></a>
-
-   <table><thead align="left"><tr id="zh-cn_topic_0182554604_row611318123710"><th class="cellrowborder" valign="top" width="11.959999999999999%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0182554604_p81141820376"><a name="zh-cn_topic_0182554604_p81141820376"></a><a name="zh-cn_topic_0182554604_p81141820376"></a>模型名称</p>
-   </th>
-   <th class="cellrowborder" valign="top" width="8.07%" id="mcps1.2.4.1.2"><p id="zh-cn_topic_0182554604_p13181823711"><a name="zh-cn_topic_0182554604_p13181823711"></a><a name="zh-cn_topic_0182554604_p13181823711"></a>模型说明</p>
-   </th>
-   <th class="cellrowborder" valign="top" width="79.97%" id="mcps1.2.4.1.3"><p id="zh-cn_topic_0182554604_p1717182378"><a name="zh-cn_topic_0182554604_p1717182378"></a><a name="zh-cn_topic_0182554604_p1717182378"></a>模型下载路径</p>
-   </th>
-   </tr>
-   </thead>
-   <tbody><tr id="zh-cn_topic_0182554604_row1119187377"><td class="cellrowborder" valign="top" width="11.959999999999999%" headers="mcps1.2.4.1.1 "><p id="zh-cn_topic_0182554604_p7118189378"><a name="zh-cn_topic_0182554604_p7118189378"></a><a name="zh-cn_topic_0182554604_p7118189378"></a>yolov3</p>
-   </td>
-   <td class="cellrowborder" valign="top" width="8.07%" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0182554604_p151818183718"><a name="zh-cn_topic_0182554604_p151818183718"></a><a name="zh-cn_topic_0182554604_p151818183718"></a>目标检测网络模型。</p>
-   <p id="zh-cn_topic_0182554604_p11121816373"><a name="zh-cn_topic_0182554604_p11121816373"></a><a name="zh-cn_topic_0182554604_p11121816373"></a>是基于Caffe的yolov3模型。</p>
-   </td>
-   <td class="cellrowborder" valign="top" width="79.97%" headers="mcps1.2.4.1.3 "><p id="zh-cn_topic_0182554604_p611318163718"><a name="zh-cn_topic_0182554604_p611318163718"></a><a name="zh-cn_topic_0182554604_p611318163718"></a>请参考<a href="https://github.com/Ascend-Huawei/models/tree/master/computer_vision/object_detect/yolov3" target="_blank" rel="noopener noreferrer">https://github.com/Ascend-Huawei/models/tree/master/computer_vision/object_detect/yolov3</a>目录中README.md下载原始网络模型文件及其对应的权重文件。</p>
-   </td>
-   </tr>
-   </tbody>
-   </table>
-
-3. 将原始网络模型转换为Davinci模型。
-   1.  在Mind Studio操作界面的顶部菜单栏中选择“Tool \> Convert Model”，进入模型转换界面。
-   2. 在弹出的**Convert Model**操作界面中，Model File与Weight File分别选择[2](#zh-cn_topic_0182554604_li2074865610364)中下载的模型文件和权重文件。
-      - **Model Name**填写为[表1](#zh-cn_topic_0182554604_table19942111763710)对应的**模型名称**：yolov3。
-
-      - 其他保持默认值。
-
-        **图 1** yolov3模型转换配置<a name="zh-cn_topic_0182554604_fig79252510407"></a>  
-        ![](doc/source/img/yolov3-1.PNG "yolov3-1")
-
-        
-
-        ![](doc/source/img/yolov3-2.PNG "yolov3-2")
+    >![](public_sys-resources/icon-note.gif) **说明：**   
+    >-   该部署方式，需要手动完成代码下载、模型转换、环境变量配置等过程。完成后，会对其中的过程更加了解。  
 
 
-    3.  单击OK开始转换模型。
-    
-        模型转换成功后，后缀为.om的Davinci模型存放地址为：\\$HOME/tools/che/model-zoo/my-model/yolov3。
-        将模型复制放到代码 script文件夹下，如：\\$HOME/sample-objectdetection/script/
+## 编译<a name="zh-cn_topic_0228461856_section3723145213347"></a>
 
-4.  以Mind Studio安装用户登录Mind Studio所在Ubuntu服务器，并设置环境变量DDK\_HOME。
+1.  打开对应的工程。
 
-    **vim \~/.bashrc**
+    以Mind Studio安装用户在命令行中进入安装包解压后的“MindStudio-ubuntu/bin”目录，如：$HOME/MindStudio-ubuntu/bin。执行如下命令启动Mind Studio。
 
-    执行如下命令在最后一行添加DDK\_HOME及LD\_LIBRARY\_PATH的环境变量。
+    **./MindStudio.sh**
 
-    **export DDK\_HOME=$HOME/tools/che/ddk/ddk**
+    启动成功后，打开**sample-objectdetctionbyyolov3**工程，如[图 打开objectdetectionyolov3工程](#zh-cn_topic_0228461856_zh-cn_topic_0219028422_fig9485154817568)所示。
 
-    **export LD\_LIBRARY\_PATH=$DDK\_HOME/uihost/lib**
+    **图 1**  打开objectdetectionyolov3工程<a name="zh-cn_topic_0228461856_zh-cn_topic_0219028422_fig9485154817568"></a>  
+    ![](figures/打开objectdetectionyolov3工程.png "打开objectdetectionyolov3工程")
 
-    >![](doc/source/img/icon-note.gif) **说明：**    
-    >-   如果此环境变量已经添加，则此步骤可跳过。  
+2.  在**src/param\_configure.conf**文件中配置相关工程信息。
 
-    输入:wq!保存退出。
+    **图 2**  配置文件路径<a name="zh-cn_topic_0228461856_zh-cn_topic_0219028422_fig1777213106583"></a>  
+    ![](figures/配置文件路径.png "配置文件路径")
 
-    执行如下命令使环境变量生效。
+    该配置文件默认配置内容如下：
 
-    **source \~/.bashrc**
+    ```
+    remote_host=192.168.1.2
+    ```
 
+    remote\_host：Atlas 200 DK开发者板的IP地址。
 
-## 部署<a name="zh-cn_topic_0182554604_section3723145213347"></a>
+    >![](public_sys-resources/icon-note.gif) **说明：**   
+    >-   注意参数填写时不需要使用“”符号。  
+    >-   当前已经按照配置示例配置默认值，请按照配置情况自行修改。  
 
-1.  以Mind Studio安装用户进入目标检测网络应用代码所在根目录，如：$HOME/sample-objectdetection。
-2.  执行部署脚本，进行工程环境准备，包括公共库的编译与部署、应用的编译与部署等操作。
+3.  执行deploy脚本， 进行配置参数调整及第三方库下载编译 打开Mind Studio工具的Terminal，此时默认在代码主目录下，执行如下命令在后台指执行deploy脚本，进行环境部署。如[图 执行deploy脚本](#zh-cn_topic_0228461856_zh-cn_topic_0219028422_fig4961151613216)所示。
 
-    bash deploy.sh  _host\_ip_ _model\_mode_
+    **图 3**  执行deploy脚本<a name="zh-cn_topic_0228461856_zh-cn_topic_0219028422_fig4961151613216"></a>  
+    ![](figures/执行deploy脚本.png "执行deploy脚本")
 
-    -   _host\_ip_：对于Atlas 200 DK开发者板，即为开发者板的IP地址。对于AI加速云服务器，即为Host的IP地址。
-    -   local：若Mind Studio所在Ubuntu系统未连接网络，请使用local模式，执行此命令前，需要参考[公共代码库下载](#zh-cn_topic_0182554604_section92241245122511)将依赖的公共代码库ezdvpp下载到“sample-objectdetection/script“目录下。
-    -   internet：若Mind Studio所在Ubuntu系统已连接网络，请使用internet模式，在线下载依赖代码库ezdvpp。
+    >![](public_sys-resources/icon-note.gif) **说明：**   
+    >-   首次deploy时，没有部署第三方库时会自动下载并编译，耗时可能比较久，请耐心等待。后续再重新编译时，不会重复下载编译，部署如上图所示。  
+    >-   deploy时，需要选择与开发板通信的主机侧ip，一般为虚拟网卡配置的ip。如果此ip和开发板ip属于同网段，则会自动选择并部署。如果非同网段，则需要手动输入与开发板通信的主机侧ip才能完成deploy。  
 
-    命令示例：
+4.  开始编译，打开Mindstudio工具，在工具栏中点击**Build \> Build \> Build-Configuration**。如[图 编译操作及生成文件](#zh-cn_topic_0228461856_zh-cn_topic_0219028422_fig1487710597597)所示，会在目录下生成build和run文件夹。
 
-    **bash deploy.sh 192.168.1.2 internet**
+    **图 4**  编译操作及生成文件<a name="zh-cn_topic_0228461856_zh-cn_topic_0219028422_fig1487710597597"></a>  
+    ![](figures/编译操作及生成文件.png "编译操作及生成文件")
+
+    注意：
+
+    首次编译工程时，**Build \> Build**为灰色不可点击状态。需要点击**Build \> Edit Build Configuration**，配置编译参数后再进行编译。
+
+    ![](figures/build_configuration.png)
+
+5.  将需要推理的图片上传至Host侧任一属组为HwHiAiUser用户的目录。
 
     图片要求如下：
 
@@ -109,61 +88,44 @@
     -   输入图片高度：16px\~4096px之间的整数。
 
 
-## 运行<a name="zh-cn_topic_0182554604_section87121843104920"></a>
+## 运行<a name="zh-cn_topic_0228461856_section1620073406"></a>
 
-1.  在Mind Studio所在Ubuntu服务器中，以HwHiAiUser用户SSH登录到Host侧。
+1.  在Mindstudio工具的工具栏中找到Run按钮，点击  **Run \> Run 'sample-objectdetection'**，如[图 程序已执行示意图](#zh-cn_topic_0228461856_zh-cn_topic_0219028422_fig18918132273612)所示，可执行程序已经在开发板执行。
+
+    **图 5**  程序已执行示意图<a name="zh-cn_topic_0228461856_zh-cn_topic_0219028422_fig18918132273612"></a>  
+    
+
+    ![](figures/092439dfaa8bf0593a1f1aac2958e8d.png)
+
+    以上报错信息请忽略，因为Mind Studio无法为可执行程序传参，上述步骤是将可执行程序与依赖的库文件部署到开发者板，此步骤需要ssh登录到开发者板至相应的目录文件下手动执行，具体请参考以下步骤。
+
+2.  在Mind Studio所在Ubuntu服务器中，以HwHiAiUser用户SSH登录到Host侧。
 
     **ssh HwHiAiUser@**_host\_ip_
 
     对于Atlas 200 DK，host\_ip默认为192.168.1.2（USB连接）或者192.168.0.2（NIC连接）。
 
-    对于AI加速云服务器，host\_ip即为当前Mind Studio所在服务器的IP地址。
+3.  进入yolov3检测网络应用的可执行文件所在路径。
 
-2.  进入Yolov3检测网络应用的可执行文件所在路径。
+    命令举例如下：
 
-    **cd \~/HIAI\_PROJECTS/ascend\_workspace/objectdetection/out**
+    **cd \~/HIAI\_PROJECTS/workspace\_mind\_studio/sample\_objectdetectionbyyolov3\_XXXXX/out**
 
-3.  执行应用程序。
+    >![](public_sys-resources/icon-note.gif) **说明：**   
+    >-   此路径中sample\_objectdetectionbyyolov3\_XXXXX的XXXXX是一串字母和数字的随机组合，每次重新编译运行时都会随机生成。  
+
+4.  执行应用程序。
 
     执行**run\_object\_detection\_yolov3.py**脚本会将推理生成的图片保存至指定路径。
 
     命令示例如下所示：
 
-    **python3 run\_object\_detection\_yolov3.py -m  _yolov3.om_  -w  _416_  -h  _416_  -i**
+    **python3 run\_object\_yolov3.py -w  _416_  -h  _416_  -i** _**./example.jpg**_ **-o  _./out_**
 
-    **_./example.jpg_  -o  _./out_  -c** _21_
-
-    -   -m/--model\_path：离线模型路径。
     -   -w/model\_width：模型的输入图片宽度，为16\~4096之间的整数。
     -   -h/model\_height：模型的输入图片高度，为16\~4096之间的整数。
     -   -i/input\_path：输入图片的目录/路径，可以有多个输入。
     -   -o/output\_path：输出图片的目录，默认为当前目录。
 
-4.  其他详细参数请执行**python3 run\_object\_detection\_yolov3.py --help**命令参见帮助信息。
-
-## 公共代码库下载<a name="zh-cn_topic_0182554604_section92241245122511"></a>
-
-将依赖的软件库下载到“sample-objectdetection/script“目录下。
-
-**表 2**  依赖代码库下载
-
-<a name="zh-cn_topic_0182554604_table75751912124510"></a>
-<table><thead align="left"><tr id="zh-cn_topic_0182554604_row3576111214511"><th class="cellrowborder" valign="top" width="33.33333333333333%" id="mcps1.2.4.1.1"><p id="zh-cn_topic_0182554604_p5576712114510"><a name="zh-cn_topic_0182554604_p5576712114510"></a><a name="zh-cn_topic_0182554604_p5576712114510"></a>模块名称</p>
-</th>
-<th class="cellrowborder" valign="top" width="33.33333333333333%" id="mcps1.2.4.1.2"><p id="zh-cn_topic_0182554604_p157661218455"><a name="zh-cn_topic_0182554604_p157661218455"></a><a name="zh-cn_topic_0182554604_p157661218455"></a>模块描述</p>
-</th>
-<th class="cellrowborder" valign="top" width="33.33333333333333%" id="mcps1.2.4.1.3"><p id="zh-cn_topic_0182554604_p10576201211454"><a name="zh-cn_topic_0182554604_p10576201211454"></a><a name="zh-cn_topic_0182554604_p10576201211454"></a>下载地址</p>
-</th>
-</tr>
-</thead>
-<tbody><tr id="zh-cn_topic_0182554604_row1757621219458"><td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.1 "><p id="zh-cn_topic_0182554604_p15576212114511"><a name="zh-cn_topic_0182554604_p15576212114511"></a><a name="zh-cn_topic_0182554604_p15576212114511"></a>EZDVPP</p>
-</td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.2 "><p id="zh-cn_topic_0182554604_p1257661204510"><a name="zh-cn_topic_0182554604_p1257661204510"></a><a name="zh-cn_topic_0182554604_p1257661204510"></a>对DVPP接口进行了封装，提供对图片/视频的处理能力。</p>
-</td>
-<td class="cellrowborder" valign="top" width="33.33333333333333%" headers="mcps1.2.4.1.3 "><p id="zh-cn_topic_0182554604_p11576312114515"><a name="zh-cn_topic_0182554604_p11576312114515"></a><a name="zh-cn_topic_0182554604_p11576312114515"></a><a href="https://github.com/Ascend/sdk-ezdvpp" target="_blank" rel="noopener noreferrer">https://github.com/Ascend/sdk-ezdvpp</a></p>
-<p id="zh-cn_topic_0182554604_p18576131264519"><a name="zh-cn_topic_0182554604_p18576131264519"></a><a name="zh-cn_topic_0182554604_p18576131264519"></a>下载后请保持文件夹名称为ezdvpp。</p>
-</td>
-</tr>
-</tbody>
-</table>
+5.  其他详细参数请执行**python3 run\_object\_detection\_yolov3.py --help**命令参见帮助信息。
 
