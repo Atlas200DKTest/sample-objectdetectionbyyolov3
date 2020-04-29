@@ -120,7 +120,7 @@
 
     命令示例如下所示：
 
-    **python3 run\_object\_yolov3.py -w  _416_  -h  _416_  -i** _**./example.jpg**_ **-o  _./out_**
+    **python3 run\_object\_detection\_yolov3.py -w  _416_  -h  _416_  -i** _**./example.jpg**_ **-o  _./out_**
 
     -   -w/model\_width：模型的输入图片宽度，为16\~4096之间的整数。
     -   -h/model\_height：模型的输入图片高度，为16\~4096之间的整数。
